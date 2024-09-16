@@ -1,7 +1,9 @@
 import axios from "axios";                                  // Import Axios
 import React, { useEffect, useState } from "react";
 import './App.css';
-import { EmployeeData } from "./EmployeeData";
+import { EmployeeData } from './EmployeeData';
+
+
 function App() {
   const [data, setData] = useState([]);
   const [firstName, setFirstName] = useState("");
@@ -46,34 +48,27 @@ function App() {
     if (lastName === "") error += "Last name is required, ";
     if (age <= 0) error += "Age is required.";
   
-    if (error === "") {
-      // Post data to the server using axios
-      try {
-        await axios.post("http://localhost:5000/employees", {
-          firstName,
-          lastName,
-          age,
-        });
-        
-        // Simulate adding the new object to data (local state)
-        const newId = data.length > 0 ? data[data.length - 1].id + 1 : 1;
-        const newObject = {
-          id: newId,
-          firstName: firstName,
-          lastName: lastName,
-          age: age,
-        };
-        setData([...data, newObject]); // Update the state with the new object
-  
-        fetchEmployees(); // Fetch updated list of employees from the server
-        handleClear(); // Clear form inputs
-      } catch (err) {
-        console.error("Error saving employee:", err);
-      }
-    } else {
+    if (error !== "") {
       alert(error); // Display validation error
+      return; // Prevent further execution if there are errors
+    }
+  
+    // If no errors, proceed with saving
+    try {
+      await axios.post("http://localhost:5000/employees", {
+        firstName,
+        lastName,
+        age,
+      });
+  
+      fetchEmployees(); // Fetch updated list of employees from the server
+      handleClear(); // Clear form inputs
+    } catch (err) {
+      console.error("Error saving employee:", err);
     }
   };
+  
+  
   
 
   const handleUpdate = async () => {
