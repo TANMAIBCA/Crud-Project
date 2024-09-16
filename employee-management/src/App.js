@@ -67,9 +67,6 @@ function App() {
       console.error("Error saving employee:", err);
     }
   };
-  
-  
-  
 
   const handleUpdate = async () => {
     await axios.put(`http://localhost:5000/employees/${id}`, {
